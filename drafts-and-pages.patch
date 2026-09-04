@@ -1,0 +1,219 @@
+diff --git a/.nojekyll b/.nojekyll
+new file mode 100644
+index 0000000..e69de29
+diff --git a/assets/css/components/post.css b/assets/css/components/post.css
+index b3ac6f4..2c7c467 100644
+--- a/assets/css/components/post.css
++++ b/assets/css/components/post.css
+@@ -175,3 +175,22 @@
+   border-top: 1px solid var(--c-border);
+   margin-block: var(--space-6);
+ }
++
++/* ── Draft badge ─────────────────────────────────────────────────────────
++   Shown in a post's meta row when its data entry has `draft: true`. Loud
++   enough that you cannot mistake a preview for a published page. */
++.badge {
++  padding: 2px var(--space-2);
++  border-radius: var(--radius-full);
++  font-family: var(--font-sans);
++  font-size: var(--text-xs);
++  font-weight: var(--weight-bold);
++  letter-spacing: 0.02em;
++  text-transform: uppercase;
++}
++
++.badge--draft {
++  color: #8a5a00;
++  background: #fdf3dc;
++  border: 1px solid #f0dfb4;
++}
+diff --git a/assets/js/components/post-header.js b/assets/js/components/post-header.js
+index af0b86b..6f59b56 100644
+--- a/assets/js/components/post-header.js
++++ b/assets/js/components/post-header.js
+@@ -20,6 +20,9 @@ import { PostRow } from "./blog.js";
+ export function PostHeader({ post, locale, minutes }) {
+   return el("header", { class: "post__header" }, [
+     el("div", { class: "post__meta" }, [
++      // A draft announces itself, so a preview can never be mistaken for
++      // something that is actually live.
++      post.draft && el("span", { class: "badge badge--draft", text: "Draft" }),
+       el("time", { datetime: post.date, text: formatDate(post.date, locale) }),
+       minutes && el("span", { class: "post__dot", text: "·", "aria-hidden": "true" }),
+       minutes && el("span", { text: `${minutes} min read` }),
+diff --git a/assets/js/data/site.data.js b/assets/js/data/site.data.js
+index 9191fe4..6e85420 100644
+--- a/assets/js/data/site.data.js
++++ b/assets/js/data/site.data.js
+@@ -101,6 +101,7 @@ export const projects = [
+  */
+ export const posts = [
+   {
++    draft: true, // placeholder — delete this line to publish
+     slug: "first-four-vlans",
+     date: "2026-08-19",
+     title: "Flattening a flat network: my first four VLANs",
+@@ -109,6 +110,7 @@ export const posts = [
+     tags: ["network"],
+   },
+   {
++    draft: true, // placeholder — delete this line to publish
+     slug: "wake-on-lan",
+     date: "2026-07-02",
+     title: "Wake-on-LAN that actually wakes on LAN",
+@@ -117,6 +119,7 @@ export const posts = [
+     tags: ["hardware"],
+   },
+   {
++    draft: true, // placeholder — delete this line to publish
+     slug: "reverse-proxy",
+     date: "2026-05-28",
+     title: "Running a reverse proxy without exposing anything",
+@@ -124,6 +127,7 @@ export const posts = [
+     tags: ["network", "tls"],
+   },
+   {
++    draft: true, // placeholder — delete this line to publish
+     slug: "ups-failover",
+     date: "2026-04-11",
+     title: "Cheap UPS, expensive lesson: testing failover before you need it",
+@@ -131,6 +135,7 @@ export const posts = [
+     tags: ["hardware"],
+   },
+   {
++    draft: true, // placeholder — delete this line to publish
+     slug: "idle-watts",
+     date: "2026-02-23",
+     title: "Measuring idle watts on three second-hand mini PCs",
+@@ -192,7 +197,7 @@ export const settings = {
+    * links in feed.xml (`node tools/build-feed.mjs`); nothing in the browser
+    * reads it, so the site works before you have a domain.
+    */
+-  siteUrl: "https://example.com",
++  siteUrl: "https://bbek10.github.io/ownPersonalSite",
+   /** One line describing the site, used in the feed's channel description. */
+   description: "Homelab hardware, self-hosted services and home networking.",
+   /** Sort `posts` newest-first at runtime instead of trusting the array order. */
+@@ -209,12 +214,22 @@ export const settings = {
+  * Every post with its `href` filled in, newest first.
+  * Derived once here so no component has to remember the URL shape.
+  *
++ * DRAFTS: an entry with `draft: true` is left out of every list and out of
++ * feed.xml. Its page still works if you open the URL directly (it shows a
++ * "Draft" badge and asks robots not to index it), which is what makes it
++ * useful for previewing a post before it goes live. Delete the `draft` line
++ * to publish.
++ *
++ * @param {Object} [options]
++ * @param {boolean} [options.includeDrafts=false]
+  * @returns {Array}
+  */
+-export function allPosts() {
++export function allPosts({ includeDrafts = false } = {}) {
++  const visible = includeDrafts ? posts : posts.filter((post) => !post.draft);
++
+   const ordered = settings.sortPostsByDate
+-    ? [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))
+-    : posts;
++    ? [...visible].sort((a, b) => new Date(b.date) - new Date(a.date))
++    : visible;
+ 
+   return ordered.map((post) => ({
+     ...post,
+diff --git a/assets/js/pages/post.js b/assets/js/pages/post.js
+index 78113fd..546de3e 100644
+--- a/assets/js/pages/post.js
++++ b/assets/js/pages/post.js
+@@ -24,8 +24,11 @@ const { data, base } = initShell();
+ 
+ const article = qs("[data-post]");
+ const slug = article?.dataset.post;
+-const posts = data.allPosts();
+-const post = posts.find((entry) => entry.slug === slug);
++
++// Two lists, deliberately: a draft's own page must still render (that is the
++// point of a draft), but prev/next may only ever walk published posts.
++const published = data.allPosts();
++const post = data.allPosts({ includeDrafts: true }).find((entry) => entry.slug === slug);
+ 
+ if (!post) {
+   console.warn(`[post] "${slug}" is not registered in site.data.js`);
+@@ -45,11 +48,21 @@ if (!post) {
+     PostHeader({ post, locale: data.settings.dateLocale, minutes }),
+   );
+ 
+-  const nav = PostNav({ posts, slug, base });
++  // A draft has no place in the published sequence, so it gets no prev/next.
++  const nav = post.draft ? null : PostNav({ posts: published, slug, base });
+   if (nav) mount("[data-mount='post-nav']", nav);
+ 
+   // One source of truth for the title and description: the data file.
+-  document.title = `${post.title} · ${data.profile.name}`;
++  document.title = `${post.draft ? "[Draft] " : ""}${post.title} · ${data.profile.name}`;
+   const description = qs('meta[name="description"]');
+   if (description && post.summary) description.setAttribute("content", post.summary);
++
++  // Ask search engines to leave an unpublished post alone. Anyone with the URL
++  // can still read it — this is a "not finished", not a secret.
++  if (post.draft) {
++    const robots = document.createElement("meta");
++    robots.name = "robots";
++    robots.content = "noindex, nofollow";
++    document.head.append(robots);
++  }
+ }
+diff --git a/feed.xml b/feed.xml
+index 3c3543e..c1549fe 100644
+--- a/feed.xml
++++ b/feed.xml
+@@ -2,45 +2,11 @@
+ <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+   <channel>
+     <title>Nodes &amp; Wires</title>
+-    <link>https://example.com/</link>
++    <link>https://bbek10.github.io/ownPersonalSite/</link>
+     <description>Homelab hardware, self-hosted services and home networking.</description>
+     <language>en</language>
+-    <lastBuildDate>Wed, 19 Aug 2026 00:00:00 GMT</lastBuildDate>
+-    <atom:link href="https://example.com/feed.xml" rel="self" type="application/rss+xml" />
+-    <item>
+-      <title>Flattening a flat network: my first four VLANs</title>
+-      <link>https://example.com/blog/first-four-vlans/</link>
+-      <guid isPermaLink="true">https://example.com/blog/first-four-vlans/</guid>
+-      <pubDate>Wed, 19 Aug 2026 00:00:00 GMT</pubDate>
+-      <description>Splitting one trusting /24 into management, trusted, IoT and guest — and the three things that broke immediately</description>
+-    </item>
+-    <item>
+-      <title>Wake-on-LAN that actually wakes on LAN</title>
+-      <link>https://example.com/blog/wake-on-lan/</link>
+-      <guid isPermaLink="true">https://example.com/blog/wake-on-lan/</guid>
+-      <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+-      <description>Magic packets, a stubborn Realtek NIC, and why the firmware setting matters more than the OS one</description>
+-    </item>
+-    <item>
+-      <title>Running a reverse proxy without exposing anything</title>
+-      <link>https://example.com/blog/reverse-proxy/</link>
+-      <guid isPermaLink="true">https://example.com/blog/reverse-proxy/</guid>
+-      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+-      <description>Internal TLS with a private CA, wildcard certs, and split-horizon DNS</description>
+-    </item>
+-    <item>
+-      <title>Cheap UPS, expensive lesson: testing failover before you need it</title>
+-      <link>https://example.com/blog/ups-failover/</link>
+-      <guid isPermaLink="true">https://example.com/blog/ups-failover/</guid>
+-      <pubDate>Sat, 11 Apr 2026 00:00:00 GMT</pubDate>
+-      <description>What a scheduled power cut taught me about shutdown ordering</description>
+-    </item>
+-    <item>
+-      <title>Measuring idle watts on three second-hand mini PCs</title>
+-      <link>https://example.com/blog/idle-watts/</link>
+-      <guid isPermaLink="true">https://example.com/blog/idle-watts/</guid>
+-      <pubDate>Mon, 23 Feb 2026 00:00:00 GMT</pubDate>
+-      <description>A month of readings, and the machine that quietly cost the most</description>
+-    </item>
++    <lastBuildDate>Fri, 04 Sep 2026 12:29:19 GMT</lastBuildDate>
++    <atom:link href="https://bbek10.github.io/ownPersonalSite/feed.xml" rel="self" type="application/rss+xml" />
++
+   </channel>
+ </rss>

@@ -20,6 +20,9 @@ import { PostRow } from "./blog.js";
 export function PostHeader({ post, locale, minutes }) {
   return el("header", { class: "post__header" }, [
     el("div", { class: "post__meta" }, [
+      // A draft announces itself, so a preview can never be mistaken for
+      // something that is actually live.
+      post.draft && el("span", { class: "badge badge--draft", text: "Draft" }),
       el("time", { datetime: post.date, text: formatDate(post.date, locale) }),
       minutes && el("span", { class: "post__dot", text: "·", "aria-hidden": "true" }),
       minutes && el("span", { text: `${minutes} min read` }),

@@ -175,3 +175,22 @@
   border-top: 1px solid var(--c-border);
   margin-block: var(--space-6);
 }
+
+/* ── Draft badge ─────────────────────────────────────────────────────────
+   Shown in a post's meta row when its data entry has `draft: true`. Loud
+   enough that you cannot mistake a preview for a published page. */
+.badge {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge--draft {
+  color: #8a5a00;
+  background: #fdf3dc;
+  border: 1px solid #f0dfb4;
+}

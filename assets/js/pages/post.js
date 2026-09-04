@@ -24,8 +24,11 @@ const { data, base } = initShell();
 
 const article = qs("[data-post]");
 const slug = article?.dataset.post;
-const posts = data.allPosts();
-const post = posts.find((entry) => entry.slug === slug);
+
+// Two lists, deliberately: a draft's own page must still render (that is the
+// point of a draft), but prev/next may only ever walk published posts.
+const published = data.allPosts();
+const post = data.allPosts({ includeDrafts: true }).find((entry) => entry.slug === slug);
 
 if (!post) {
   console.warn(`[post] "${slug}" is not registered in site.data.js`);
@@ -45,11 +48,21 @@ if (!post) {
     PostHeader({ post, locale: data.settings.dateLocale, minutes }),
   );
 
-  const nav = PostNav({ posts, slug, base });
+  // A draft has no place in the published sequence, so it gets no prev/next.
+  const nav = post.draft ? null : PostNav({ posts: published, slug, base });
   if (nav) mount("[data-mount='post-nav']", nav);
 
   // One source of truth for the title and description: the data file.
-  document.title = `${post.title} · ${data.profile.name}`;
+  document.title = `${post.draft ? "[Draft] " : ""}${post.title} · ${data.profile.name}`;
   const description = qs('meta[name="description"]');
   if (description && post.summary) description.setAttribute("content", post.summary);
+
+  // Ask search engines to leave an unpublished post alone. Anyone with the URL
+  // can still read it — this is a "not finished", not a secret.
+  if (post.draft) {
+    const robots = document.createElement("meta");
+    robots.name = "robots";
+    robots.content = "noindex, nofollow";
+    document.head.append(robots);
+  }
 }

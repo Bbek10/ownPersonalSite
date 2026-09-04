@@ -101,6 +101,7 @@ export const projects = [
  */
 export const posts = [
   {
+    draft: true, // placeholder — delete this line to publish
     slug: "first-four-vlans",
     date: "2026-08-19",
     title: "Flattening a flat network: my first four VLANs",
@@ -109,6 +110,7 @@ export const posts = [
     tags: ["network"],
   },
   {
+    draft: true, // placeholder — delete this line to publish
     slug: "wake-on-lan",
     date: "2026-07-02",
     title: "Wake-on-LAN that actually wakes on LAN",
@@ -117,6 +119,7 @@ export const posts = [
     tags: ["hardware"],
   },
   {
+    draft: true, // placeholder — delete this line to publish
     slug: "reverse-proxy",
     date: "2026-05-28",
     title: "Running a reverse proxy without exposing anything",
@@ -124,6 +127,7 @@ export const posts = [
     tags: ["network", "tls"],
   },
   {
+    draft: true, // placeholder — delete this line to publish
     slug: "ups-failover",
     date: "2026-04-11",
     title: "Cheap UPS, expensive lesson: testing failover before you need it",
@@ -131,6 +135,7 @@ export const posts = [
     tags: ["hardware"],
   },
   {
+    draft: true, // placeholder — delete this line to publish
     slug: "idle-watts",
     date: "2026-02-23",
     title: "Measuring idle watts on three second-hand mini PCs",
@@ -192,7 +197,7 @@ export const settings = {
    * links in feed.xml (`node tools/build-feed.mjs`); nothing in the browser
    * reads it, so the site works before you have a domain.
    */
-  siteUrl: "https://example.com",
+  siteUrl: "https://bbek10.github.io/ownPersonalSite",
   /** One line describing the site, used in the feed's channel description. */
   description: "Homelab hardware, self-hosted services and home networking.",
   /** Sort `posts` newest-first at runtime instead of trusting the array order. */
@@ -209,12 +214,22 @@ export const settings = {
  * Every post with its `href` filled in, newest first.
  * Derived once here so no component has to remember the URL shape.
  *
+ * DRAFTS: an entry with `draft: true` is left out of every list and out of
+ * feed.xml. Its page still works if you open the URL directly (it shows a
+ * "Draft" badge and asks robots not to index it), which is what makes it
+ * useful for previewing a post before it goes live. Delete the `draft` line
+ * to publish.
+ *
+ * @param {Object} [options]
+ * @param {boolean} [options.includeDrafts=false]
  * @returns {Array}
  */
-export function allPosts() {
+export function allPosts({ includeDrafts = false } = {}) {
+  const visible = includeDrafts ? posts : posts.filter((post) => !post.draft);
+
   const ordered = settings.sortPostsByDate
-    ? [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))
-    : posts;
+    ? [...visible].sort((a, b) => new Date(b.date) - new Date(a.date))
+    : visible;
 
   return ordered.map((post) => ({
     ...post,
