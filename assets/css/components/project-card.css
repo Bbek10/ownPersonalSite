@@ -1,0 +1,133 @@
+/* ==========================================================================
+   project-card.css — cards in the projects grid.
+   The whole card is the click target when the project has an `href`, so the
+   hover state lives on the card, not on the title.
+   ========================================================================== */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* clips the cover to the rounded corner */
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  color: inherit;
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+/* `a.card` only — a card without a link should not look interactive. */
+a.card:hover {
+  border-color: var(--c-border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  color: inherit;
+}
+
+/* ── Cover ──────────────────────────────────────────────────────────────── */
+
+.card__cover {
+  aspect-ratio: 16 / 9;
+  background: var(--c-surface-sunken);
+  border-bottom: 1px solid var(--c-border);
+  overflow: hidden;
+}
+
+.card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur) var(--ease);
+}
+
+a.card:hover .card__cover img {
+  transform: scale(1.02);
+}
+
+/* Generated plate used when no cover image is set. The hue comes from an
+   inline `--cover-hue` set by projects.js, derived from the project title. */
+.card__cover--generated {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(
+      135deg,
+      hsl(var(--cover-hue, 165) 34% 95%) 0%,
+      hsl(calc(var(--cover-hue, 165) + 24) 30% 90%) 100%
+    );
+}
+
+.card__cover-text {
+  padding-inline: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+  color: hsl(var(--cover-hue, 165) 30% 32%);
+  text-align: center;
+}
+
+/* Featured cards are wider, so give the cover a shorter, banner-like ratio. */
+.card.is-featured .card__cover {
+  aspect-ratio: 21 / 8;
+}
+
+/* ── Body ───────────────────────────────────────────────────────────────── */
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.card__title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+}
+
+/* The small chevron / ↗ at the end of the title row. */
+.card__cue {
+  display: inline-flex;
+  color: var(--c-ink-mute);
+  transition:
+    transform var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+a.card:hover .card__cue {
+  color: var(--c-accent);
+  transform: translate(2px, -1px);
+}
+
+.card__blurb {
+  font-size: var(--text-sm);
+  color: var(--c-ink-soft);
+  text-wrap: pretty;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.tag {
+  padding: 2px var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--c-ink-mute);
+  background: var(--c-surface-sunken);
+  border-radius: var(--radius-full);
+}

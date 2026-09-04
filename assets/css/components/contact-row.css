@@ -1,0 +1,28 @@
+/* ==========================================================================
+   contact-row.css — the contact variant of `.row` (base styles live in
+   post-row.css). Only the icon well is new here.
+   ========================================================================== */
+
+.row--contact {
+  padding-block: var(--space-3);
+}
+
+/* Soft square well holding the icon on the right of the row. */
+.row__well {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  color: var(--c-ink-mute);
+  background: var(--c-surface-sunken);
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.row--contact:hover .row__well {
+  color: var(--c-accent);
+  background: var(--c-accent-wash);
+}

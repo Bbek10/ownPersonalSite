@@ -1,0 +1,50 @@
+/* ==========================================================================
+   section.css — the shared chrome around each content section: heading row,
+   optional action link, and the empty state.
+   ========================================================================== */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.section__title {
+  font-size: var(--text-xl);
+}
+
+/* Optional "see all →" link on the right of a heading. */
+.section__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.section__action-icon {
+  display: inline-flex;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.section__action:hover .section__action-icon {
+  transform: translateX(2px);
+}
+
+.empty-state {
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--c-ink-mute);
+  font-size: var(--text-sm);
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border-strong);
+  border-radius: var(--radius-md);
+}

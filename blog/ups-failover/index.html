@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-base="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Both of these are overwritten at runtime from the data file; the
+         values here are what a crawler sees before scripts run. -->
+    <title>Cheap UPS, expensive lesson: testing failover before you need it · Nodes &amp; Wires</title>
+    <meta name="description" content="" />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <article class="post container" data-post="ups-failover">
+        <!-- Built from the data file — leave empty. -->
+        <div data-mount="post-header"></div>
+
+        <div class="prose">
+          <p>
+            The UPS was bought to protect against a five-second brownout. It has
+            never seen one. What it did see was a scheduled two-hour outage,
+            which is long enough that the interesting question is not "does it
+            hold" but "does everything shut down in the right order".
+          </p>
+
+          <h2>Order matters more than runtime</h2>
+
+          <p>
+            The VMs have to stop before the host, the host before the NAS, and
+            the NAS before the battery gives up. Get that wrong and the battery
+            buys you nothing except a slower version of pulling the plug.
+          </p>
+
+          <ol>
+            <li>Guests, gracefully, with a timeout</li>
+            <li>The hypervisor</li>
+            <li>The NAS, last, once nothing is writing to it</li>
+          </ol>
+
+          <h2>Test it on purpose</h2>
+
+          <p>
+            Pull the mains lead on a Saturday morning and watch the whole
+            sequence with a stopwatch. Mine took ninety seconds longer than the
+            configured threshold because one VM ignored the shutdown signal and
+            sat there until it was killed.
+          </p>
+
+          <blockquote>
+            <p>
+              An untested failover plan is a guess with a battery attached.
+            </p>
+          </blockquote>
+
+          <p>
+            Now the runtime threshold is set from the measured number, plus a
+            generous margin, and the test is on the calendar twice a year.
+          </p>
+        </div>
+
+        <!-- Prev/next, built from the data file — leave empty. -->
+        <div data-mount="post-nav"></div>
+      </article>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../../assets/js/pages/post.js"></script>
+  </body>
+</html>

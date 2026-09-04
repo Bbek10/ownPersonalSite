@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-base="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Flattening a flat network · Nodes &amp; Wires</title>
+    <meta
+      name="description"
+      content="Splitting one trusting /24 into management, trusted, IoT and guest."
+    />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <article class="post container" data-post="first-four-vlans">
+        <div data-mount="post-header"></div>
+
+        <div class="prose">
+          <p>
+            For years everything here lived on one flat <code>/24</code>. The
+            printer could reach the NAS, the NAS could reach the doorbell, and
+            the doorbell could — in principle — reach anything it liked. It
+            worked, which is the problem: nothing forces you to fix a network
+            that works.
+          </p>
+
+          <p>
+            The plan was four segments, which is about as far as you can go
+            before the rules stop fitting on one page.
+          </p>
+
+          <h2>The segments</h2>
+
+          <ul>
+            <li><strong>mgmt</strong> — switch, firewall, hypervisor consoles</li>
+            <li><strong>trusted</strong> — laptops and phones that belong to people</li>
+            <li><strong>iot</strong> — everything with a cloud account and no update policy</li>
+            <li><strong>guest</strong> — internet only, no exceptions</li>
+          </ul>
+
+          <p>
+            The default rule between them is deny. Anything that needs to cross
+            gets an explicit rule with a comment saying who asked for it, which
+            turns out to matter six months later.
+          </p>
+
+          <h2>What broke immediately</h2>
+
+          <p>
+            Three things, all of them the same thing wearing different hats:
+            discovery protocols are broadcast, and broadcasts stop at the VLAN
+            boundary.
+          </p>
+
+          <ol>
+            <li>Casting from a phone on <em>trusted</em> to a speaker on <em>iot</em></li>
+            <li>The printer vanishing from every machine at once</li>
+            <li>
+              A NAS that advertised itself over mDNS and was suddenly talking to
+              nobody
+            </li>
+          </ol>
+
+          <p>
+            The fix is an mDNS reflector on the firewall, scoped to the two
+            interfaces that actually need it. Not all of them — reflecting
+            everything everywhere rebuilds the flat network you just took apart,
+            only slower.
+          </p>
+
+          <pre><code># check what the interface actually sees
+tcpdump -i vlan30 -n port 5353</code></pre>
+
+          <h2>What I would do differently</h2>
+
+          <p>
+            Write the firewall rules before moving a single device. I did it the
+            other way round and spent an evening debugging a rule that did not
+            exist yet. The segments are the easy part; the rules between them are
+            the design.
+          </p>
+        </div>
+
+        <div data-mount="post-nav"></div>
+      </article>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../../assets/js/pages/post.js"></script>
+  </body>
+</html>

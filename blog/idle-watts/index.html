@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-base="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Both of these are overwritten at runtime from the data file; the
+         values here are what a crawler sees before scripts run. -->
+    <title>Measuring idle watts on three second-hand mini PCs · Nodes &amp; Wires</title>
+    <meta name="description" content="" />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <article class="post container" data-post="idle-watts">
+        <!-- Built from the data file — leave empty. -->
+        <div data-mount="post-header"></div>
+
+        <div class="prose">
+          <p>
+            Three second-hand mini PCs, one plug meter, one month. The question
+            was simple: which of these is cheapest to leave switched on, given
+            they cost roughly the same to buy?
+          </p>
+
+          <h2>Method</h2>
+
+          <p>
+            Each machine ran the same baseline — an idle OS, no VMs, screen off
+            — for a week, logged at one-minute intervals. Idle is the number
+            that matters here, because these machines spend most of their life
+            doing nothing in particular.
+          </p>
+
+          <pre><code># average watts over the sample
+awk '{ sum += $2; n++ } END { print sum / n }' readings.tsv</code></pre>
+
+          <h2>Results</h2>
+
+          <ul>
+            <li>The oldest machine drew the most, by a wide margin</li>
+            <li>The two newer ones landed within a watt of each other</li>
+            <li>
+              The difference between best and worst, over a year, was roughly
+              what one of the machines had cost to buy
+            </li>
+          </ul>
+
+          <h2>What I changed</h2>
+
+          <p>
+            The thirsty one became the machine that wakes for backups and sleeps
+            again, and the quiet one took over everything that has to be up all
+            the time. Same hardware, a third less power, and the only work was
+            measuring.
+          </p>
+        </div>
+
+        <!-- Prev/next, built from the data file — leave empty. -->
+        <div data-mount="post-nav"></div>
+      </article>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../../assets/js/pages/post.js"></script>
+  </body>
+</html>

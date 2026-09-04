@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-base="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Wake-on-LAN that actually wakes on LAN · Nodes &amp; Wires</title>
+    <meta
+      name="description"
+      content="Magic packets, a stubborn NIC, and why the firmware setting matters more than the OS one."
+    />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <article class="post container" data-post="wake-on-lan">
+        <div data-mount="post-header"></div>
+
+        <div class="prose">
+          <p>
+            The backup box only needs to be awake for twenty minutes a night.
+            Leaving it running the other twenty-three hours costs more in
+            electricity than the drives cost in depreciation, so: wake it, back
+            up, put it back to sleep.
+          </p>
+
+          <p>Simple in theory. It took three evenings.</p>
+
+          <h2>The order that matters</h2>
+
+          <p>
+            Wake-on-LAN is enabled in two places and both have to agree. The
+            firmware setting is the one that counts — if the NIC loses power at
+            shutdown, nothing the operating system says will bring it back.
+          </p>
+
+          <pre><code># is the adapter armed?
+ethtool eno1 | grep -i wake
+# Supports Wake-on: pumbg
+# Wake-on: g          ← "g" is what you want</code></pre>
+
+          <p>
+            Mine reported <code>d</code> — disabled — after every reboot, no
+            matter what I set. The driver was resetting it on link-up, which a
+            one-line systemd unit fixes by re-arming the adapter each boot.
+          </p>
+
+          <h2>Sending the packet</h2>
+
+          <p>
+            A magic packet is a broadcast, so it does not cross a subnet
+            boundary on its own. If the sender and the sleeping machine sit on
+            different VLANs — and after
+            <a href="../first-four-vlans/">splitting the network</a> mine did —
+            the packet has to be directed at the target segment's broadcast
+            address, and the firewall has to allow it.
+          </p>
+
+          <pre><code>wakeonlan -i 10.20.30.255 aa:bb:cc:dd:ee:ff</code></pre>
+
+          <h2>Proving it works</h2>
+
+          <p>
+            The useful test is not "did it wake" but "did it wake from a cold
+            room at 3am after a power cut". Schedule it, then check the logs a
+            week later. Anything that only works when you are watching is not
+            automation.
+          </p>
+        </div>
+
+        <div data-mount="post-nav"></div>
+      </article>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../../assets/js/pages/post.js"></script>
+  </body>
+</html>

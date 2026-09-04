@@ -1,0 +1,174 @@
+/* ==========================================================================
+   header.css — sticky top bar.
+   Wide screens: links sit inline. Narrow screens: links collapse into a
+   dropdown panel toggled by the button. The `.is-menu-open` class on the
+   <header> is the single state flag (set by lib/menu.js).
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  flex: 0 0 auto;
+  background: color-mix(in srgb, var(--c-bg) 85%, transparent);
+  /* Frosted effect where supported; the solid colour above is the fallback. */
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease);
+}
+
+/* A hairline appears only once the page has scrolled, so the bar sits flush
+   with the hero at rest. `.is-scrolled` is toggled by initStickyBorder()
+   in assets/js/lib/menu.js. */
+.site-header.is-scrolled {
+  border-bottom-color: var(--c-border);
+}
+
+.site-header__inner {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* ── Brand / status pill ────────────────────────────────────────────────── */
+
+.site-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--c-ink);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  letter-spacing: -0.01em;
+}
+
+.site-header__brand:hover {
+  color: var(--c-ink);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--c-ink-mute);
+  flex: 0 0 auto;
+}
+
+.status-dot--online {
+  background: var(--c-online);
+  /* Soft halo instead of an animation — quieter, and nothing to disable for
+     reduced-motion users. */
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-online) 18%, transparent);
+}
+
+/* ── Nav ────────────────────────────────────────────────────────────────── */
+
+.site-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.site-nav__inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.site-nav__link {
+  display: block;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  color: var(--c-ink-soft);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
+}
+
+.site-nav__link:hover {
+  color: var(--c-ink);
+  background: var(--c-surface-sunken);
+}
+
+/* Set by lib/menu.js on the link whose section is on screen. */
+.site-nav__link.is-active {
+  color: var(--c-accent);
+  background: var(--c-accent-wash);
+}
+
+/* ── Mobile toggle + panel ──────────────────────────────────────────────── */
+
+.site-nav__toggle {
+  display: none; /* shown by the media query below */
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  color: var(--c-ink-soft);
+}
+
+.site-nav__toggle:hover {
+  background: var(--c-surface-sunken);
+  color: var(--c-ink);
+}
+
+/* Two icons stacked in the same button; the open state swaps which is shown. */
+.site-nav__toggle-icon--close,
+.site-header.is-menu-open .site-nav__toggle-icon {
+  display: none;
+}
+
+.site-header.is-menu-open .site-nav__toggle-icon--close {
+  display: block;
+}
+
+.site-nav__panel {
+  display: none; /* becomes a dropdown in the media query below */
+}
+
+@media (max-width: 33.99rem) {
+  .site-nav__inline {
+    display: none;
+  }
+
+  .site-nav__toggle {
+    display: inline-flex;
+  }
+
+  .site-nav__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    min-width: 11rem;
+    padding: var(--space-2);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+
+    /* Hidden by default. Using opacity/transform (rather than display:none)
+       keeps the open/close transition, and `visibility` keeps the links out
+       of the tab order while closed. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      visibility var(--dur);
+  }
+
+  .site-header.is-menu-open .site-nav__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}

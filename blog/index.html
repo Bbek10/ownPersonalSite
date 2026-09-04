@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- One level below the root, so every "/…" link is rebased with "../" -->
+<html lang="en" data-base="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Blog · Nodes &amp; Wires</title>
+    <meta name="description" content="Every post, newest first." />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="alternate" type="application/rss+xml" title="Nodes &amp; Wires" href="../feed.xml" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <div class="sections">
+        <!-- Static intro: the archive itself is built from site.data.js -->
+        <section class="page-head container">
+          <h1 class="page-head__title">Blog</h1>
+          <p class="page-head__lede">
+            Everything I have written down, newest first. Mostly homelab and
+            home-network notes, written so I can find them again.
+          </p>
+        </section>
+
+        <div class="container" data-mount="archive"></div>
+      </div>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../assets/js/pages/blog.js"></script>
+  </body>
+</html>

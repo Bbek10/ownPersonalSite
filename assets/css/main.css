@@ -1,0 +1,28 @@
+/* ==========================================================================
+   main.css — the only stylesheet index.html links to.
+   It pulls the layers in a deliberate order; later layers may override
+   earlier ones, never the other way round.
+
+     1. tokens     — variables only, no selectors that paint anything
+     2. base       — reset + raw element defaults
+     3. layout     — page shell, container widths, section rhythm
+     4. components — one file per visual component
+
+   @import costs one extra request per file in development. That is fine for
+   a personal site; if you ever care, `node tools/bundle.mjs` inlines
+   everything into a single file for you.
+   ========================================================================== */
+
+@import "tokens.css";
+@import "base.css";
+@import "layout.css";
+
+@import "components/header.css";
+@import "components/hero.css";
+@import "components/section.css";
+@import "components/project-card.css";
+@import "components/post-row.css";
+@import "components/contact-row.css";
+@import "components/page.css";
+@import "components/post.css";
+@import "components/footer.css";

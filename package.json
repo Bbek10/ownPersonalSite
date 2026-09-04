@@ -1,0 +1,12 @@
+{
+  "name": "nodes-and-wires",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A small static personal site — no framework, no build step.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "post": "node tools/new-post.mjs",
+    "feed": "node tools/build-feed.mjs"
+  }
+}

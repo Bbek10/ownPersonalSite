@@ -1,0 +1,13 @@
+# Nothing here is built, so this list is short by design.
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# If you ever add tooling
+node_modules/
+dist/
+*.log

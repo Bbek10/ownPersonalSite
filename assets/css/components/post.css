@@ -1,0 +1,177 @@
+/* ==========================================================================
+   post.css — a single post page: the header block, the prev/next footer, and
+   the `.prose` styles for the writing itself.
+
+   `.prose` is the one place in this project where bare elements are styled,
+   because the post body is hand-written HTML rather than components. Keeping
+   it scoped to `.prose` means it can never leak into the rest of the site.
+   ========================================================================== */
+
+.post {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+.post__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.post__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--c-ink-mute);
+}
+
+.post__title {
+  font-size: var(--text-2xl);
+  text-wrap: balance; /* keeps a two-line title from a one-word second line */
+}
+
+.post__summary {
+  font-size: var(--text-lg);
+  color: var(--c-ink-soft);
+  text-wrap: pretty;
+}
+
+/* ── Prev / next ────────────────────────────────────────────────────────── */
+
+.post__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--c-border);
+}
+
+/* ── Prose ──────────────────────────────────────────────────────────────── */
+
+.prose {
+  /* A slightly longer line and looser leading than the UI: this is the part
+     people actually read. */
+  font-size: var(--text-lg);
+  line-height: 1.75;
+  color: var(--c-ink-soft);
+}
+
+/* Vertical rhythm via the owl selector: space between siblings only, so the
+   first and last children never add stray margin. */
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+
+.prose h2,
+.prose h3 {
+  margin-top: var(--space-7);
+  scroll-margin-top: calc(var(--header-h) + var(--space-4));
+}
+
+.prose h2 {
+  font-size: var(--text-xl);
+}
+
+.prose h3 {
+  font-size: var(--text-lg);
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--c-accent) 35%, transparent);
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  text-decoration-color: var(--c-accent);
+}
+
+.prose strong {
+  color: var(--c-ink);
+  font-weight: var(--weight-bold);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li::marker {
+  color: var(--c-ink-mute);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  background: var(--c-surface-sunken);
+  color: var(--c-ink);
+}
+
+.prose pre {
+  margin: 0;
+  padding: var(--space-4);
+  background: var(--c-surface-sunken);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  /* Long lines scroll inside the block instead of widening the page. */
+  overflow-x: auto;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.prose blockquote {
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--c-accent);
+  color: var(--c-ink-mute);
+  font-style: italic;
+}
+
+.prose figure {
+  margin: 0;
+}
+
+.prose img {
+  width: 100%;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+}
+
+.prose figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--c-ink-mute);
+  text-align: center;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--c-border);
+  margin-block: var(--space-6);
+}

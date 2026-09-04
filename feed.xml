@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nodes &amp; Wires</title>
+    <link>https://example.com/</link>
+    <description>Homelab hardware, self-hosted services and home networking.</description>
+    <language>en</language>
+    <lastBuildDate>Wed, 19 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://example.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flattening a flat network: my first four VLANs</title>
+      <link>https://example.com/blog/first-four-vlans/</link>
+      <guid isPermaLink="true">https://example.com/blog/first-four-vlans/</guid>
+      <pubDate>Wed, 19 Aug 2026 00:00:00 GMT</pubDate>
+      <description>Splitting one trusting /24 into management, trusted, IoT and guest — and the three things that broke immediately</description>
+    </item>
+    <item>
+      <title>Wake-on-LAN that actually wakes on LAN</title>
+      <link>https://example.com/blog/wake-on-lan/</link>
+      <guid isPermaLink="true">https://example.com/blog/wake-on-lan/</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Magic packets, a stubborn Realtek NIC, and why the firmware setting matters more than the OS one</description>
+    </item>
+    <item>
+      <title>Running a reverse proxy without exposing anything</title>
+      <link>https://example.com/blog/reverse-proxy/</link>
+      <guid isPermaLink="true">https://example.com/blog/reverse-proxy/</guid>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description>Internal TLS with a private CA, wildcard certs, and split-horizon DNS</description>
+    </item>
+    <item>
+      <title>Cheap UPS, expensive lesson: testing failover before you need it</title>
+      <link>https://example.com/blog/ups-failover/</link>
+      <guid isPermaLink="true">https://example.com/blog/ups-failover/</guid>
+      <pubDate>Sat, 11 Apr 2026 00:00:00 GMT</pubDate>
+      <description>What a scheduled power cut taught me about shutdown ordering</description>
+    </item>
+    <item>
+      <title>Measuring idle watts on three second-hand mini PCs</title>
+      <link>https://example.com/blog/idle-watts/</link>
+      <guid isPermaLink="true">https://example.com/blog/idle-watts/</guid>
+      <pubDate>Mon, 23 Feb 2026 00:00:00 GMT</pubDate>
+      <description>A month of readings, and the machine that quietly cost the most</description>
+    </item>
+  </channel>
+</rss>

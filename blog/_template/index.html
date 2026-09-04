@@ -1,0 +1,85 @@
+<!doctype html>
+<!--
+  POST TEMPLATE — copy this folder to blog/<your-slug>/ and edit it.
+
+  Two things to change here:
+    1. data-post="<your-slug>" on the <article> below
+    2. the prose inside <div class="prose">
+
+  Everything else — the title, date, summary, tags, reading time, prev/next
+  links, the <title> tag — is filled in from this post's entry in
+  assets/js/data/site.data.js. Add that entry and the post appears in the
+  home page teaser list and in /blog/ automatically.
+
+  Two levels below the root, so data-base is "../../".
+-->
+<html lang="en" data-base="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Both of these are overwritten at runtime from the data file; the
+         values here are what a crawler sees before scripts run. -->
+    <title>Post · Nodes &amp; Wires</title>
+    <meta name="description" content="" />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <article class="post container" data-post="REPLACE-WITH-SLUG">
+        <!-- Built from the data file — leave empty. -->
+        <div data-mount="post-header"></div>
+
+        <div class="prose">
+          <p>
+            Opening paragraph. The first sentence does the work: what broke,
+            what you were trying to do, or what you measured.
+          </p>
+
+          <h2>A heading</h2>
+
+          <p>Body text. Inline <code>code</code> looks like this.</p>
+
+          <pre><code># a command
+ip -br addr show</code></pre>
+
+          <ul>
+            <li>A list item</li>
+            <li>Another one</li>
+          </ul>
+
+          <blockquote>
+            <p>A pull quote or an aside.</p>
+          </blockquote>
+
+          <!-- Images live in assets/img/. Uncomment once you have one, so a
+               fresh post never ships with a broken image.
+          <figure>
+            <img src="../../assets/img/example.png" alt="Describe the image" />
+            <figcaption>Caption goes here.</figcaption>
+          </figure>
+          -->
+
+        </div>
+
+        <!-- Prev/next, built from the data file — leave empty. -->
+        <div data-mount="post-nav"></div>
+      </article>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../../assets/js/pages/post.js"></script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-base="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Both of these are overwritten at runtime from the data file; the
+         values here are what a crawler sees before scripts run. -->
+    <title>Running a reverse proxy without exposing anything · Nodes &amp; Wires</title>
+    <meta name="description" content="" />
+    <meta name="color-scheme" content="light" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <article class="post container" data-post="reverse-proxy">
+        <!-- Built from the data file — leave empty. -->
+        <div data-mount="post-header"></div>
+
+        <div class="prose">
+          <p>
+            Everything here is reachable by name over TLS, and none of it is
+            reachable from the internet. That combination sounds contradictory
+            for about five minutes, until you separate "who issues the
+            certificate" from "who can open the port".
+          </p>
+
+          <h2>A certificate authority of my own</h2>
+
+          <p>
+            One offline root, one intermediate that signs a wildcard for
+            <code>*.home.example</code>, and the root certificate installed on
+            the four machines that actually need to trust it. Browsers stop
+            complaining, and nothing about it is public.
+          </p>
+
+          <pre><code>openssl x509 -in intermediate.crt -noout -dates</code></pre>
+
+          <h2>Split-horizon DNS</h2>
+
+          <p>
+            The internal resolver answers for <code>home.example</code>; the
+            outside world gets nothing, because the zone does not exist out
+            there. A service is added by writing one DNS record and one proxy
+            block, which is short enough that I actually do it rather than
+            remembering a port number.
+          </p>
+
+          <ul>
+            <li>No ports forwarded</li>
+            <li>No certificates to renew by hand — the proxy does it internally</li>
+            <li>No service reachable by anyone who is not already on the network</li>
+          </ul>
+
+          <h2>The catch</h2>
+
+          <p>
+            Phones. A device that leaves the house stops resolving those names
+            entirely, which is correct behaviour and still surprising the first
+            time. That is a VPN's problem to solve, not DNS's.
+          </p>
+        </div>
+
+        <!-- Prev/next, built from the data file — leave empty. -->
+        <div data-mount="post-nav"></div>
+      </article>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <script type="module" src="../../assets/js/pages/post.js"></script>
+  </body>
+</html>

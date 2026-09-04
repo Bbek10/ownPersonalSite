@@ -1,0 +1,51 @@
+/* ==========================================================================
+   hero.css — avatar, name, bio.
+   Centred, with a generous amount of air beneath it; this block sets the
+   calm tone for the rest of the page.
+   ========================================================================== */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding-block: var(--space-6) var(--space-2);
+}
+
+.hero__avatar {
+  width: 7rem;
+  height: 7rem;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  background: var(--c-surface-sunken);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Fallback tile shown when `profile.avatar` is null: initials on a soft
+   accent-tinted plate. */
+.hero__avatar--monogram {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  color: var(--c-accent);
+  background:
+    radial-gradient(120% 120% at 30% 20%, #ffffff 0%, var(--c-accent-wash) 70%);
+}
+
+.hero__name {
+  font-size: var(--text-2xl);
+  margin: 0;
+}
+
+.hero__bio {
+  max-width: 34rem;
+  font-size: var(--text-lg);
+  color: var(--c-ink-soft);
+  /* Keeps the last line from being a single orphaned word. */
+  text-wrap: pretty;
+}

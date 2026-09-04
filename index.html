@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- data-base tells every link helper how deep this page sits. Root → "./" -->
+<html lang="en" data-base="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Nodes &amp; Wires — homelab notes</title>
+    <meta
+      name="description"
+      content="A small personal page about homelab hardware, self-hosted services and home networking."
+    />
+    <meta name="color-scheme" content="light" />
+
+    <!-- Favicon as a data URI so the site stays dependency-free. -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6f5e'/%3E%3Cpath d='M9 20l4-8 3 5 2-3 5 6z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="alternate" type="application/rss+xml" title="Nodes &amp; Wires" href="feed.xml" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Mount points. Each region is filled by a component; keeping the
+         landmarks in the HTML means the page outline is readable here and
+         screen-reader landmarks exist immediately. -->
+    <header id="site-header" class="site-header" data-mount="header"></header>
+
+    <main id="main" class="page">
+      <!-- Section order is controlled by `layout` in site.data.js -->
+      <div data-mount="sections"></div>
+    </main>
+
+    <footer id="site-footer" class="site-footer" data-mount="footer"></footer>
+
+    <noscript>
+      <p class="noscript-note">
+        This page builds its sections with a small JavaScript module, so it
+        needs JavaScript enabled. All the content lives in
+        <code>assets/js/data/site.data.js</code> if you would rather read it there.
+      </p>
+    </noscript>
+
+    <script type="module" src="assets/js/pages/home.js"></script>
+  </body>
+</html>

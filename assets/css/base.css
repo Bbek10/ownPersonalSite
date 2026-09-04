@@ -1,0 +1,155 @@
+/* ==========================================================================
+   base.css — a small reset plus sane defaults for bare elements.
+   No component or page-specific rules belong in this file.
+   ========================================================================== */
+
+/* Border-box everywhere; it makes every width calculation in the site
+   behave the way you expect. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Strip the default margins we never want back. */
+body,
+h1,
+h2,
+h3,
+p,
+figure,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+html {
+  /* `light` pins browser UI (scrollbars, form controls) to the light theme
+     even when the OS is in dark mode. This is what makes "strictly light"
+     actually strict. */
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Anchor links land below the sticky header instead of under it. */
+  scroll-padding-top: calc(var(--header-h) + var(--space-4));
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Keeps the footer at the bottom on short pages. */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--c-ink);
+  line-height: var(--leading-tight);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.015em;
+}
+
+a {
+  color: var(--c-accent);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+a:hover {
+  color: var(--c-accent-hover);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ── Focus ────────────────────────────────────────────────────────────────
+   One visible focus style for everything, shown only for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Accessibility helpers ─────────────────────────────────────────────── */
+
+/* Visually hidden but still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Off-screen until focused, then it slides into the top-left corner. */
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-200%);
+  transition: transform var(--dur) var(--ease);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.noscript-note {
+  max-width: var(--measure);
+  margin: var(--space-6) auto;
+  padding: var(--space-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+}
+
+/* Respect the OS "reduce motion" setting: kill transitions and smooth
+   scrolling rather than making anyone motion-sick. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

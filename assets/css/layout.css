@@ -1,0 +1,59 @@
+/* ==========================================================================
+   layout.css — the page shell only: column width, vertical rhythm, and the
+   generic stack utility. Anything that paints a component lives in
+   components/.
+   ========================================================================== */
+
+/* The centred reading column. Both the header bar and every section use
+   this same class, so their contents line up on one vertical axis. */
+.container {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* <main> — grows so the footer is pushed to the bottom on short pages. */
+.page {
+  flex: 1 0 auto;
+  width: 100%;
+  padding-block: var(--space-7) var(--space-8);
+}
+
+/* Vertical space BETWEEN sections is owned by the parent, not by the
+   sections themselves. That way a section can be moved or removed without
+   leaving an orphaned margin behind. */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* Generic vertical stack: `--stack-gap` lets a caller override the spacing
+   without a new class. Used inside sections for lists of rows/cards. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap, var(--space-3));
+}
+
+/* Grid used by the projects section. One column on phones, two from 34rem
+   up. The breakpoint is deliberately container-sized rather than
+   device-sized. */
+.grid-cards {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 34rem) {
+  .grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* A card can opt out and span the full width — used for a featured
+     project. Set `featured: true` on the project in site.data.js. */
+  .grid-cards > .is-featured {
+    grid-column: 1 / -1;
+  }
+}
